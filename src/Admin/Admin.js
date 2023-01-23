@@ -4,6 +4,7 @@ export default class Admin extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: [],
       value: {
         masv: "",
         tensv: "",
@@ -92,18 +93,18 @@ export default class Admin extends Component {
   };
 
   renderUserList = () => {
+    if (this.state.formValid === false) {
+      return;
+    }
     const { value } = this.state;
     console.log(value);
-    return value.map((user) => {
-      return (
-        <tr key={user.masv}>
-          <td>{user.masv}</td>
-          <td>{user.tensv}</td>
-          <td>{user.sdt}</td>
-          <td>{user.email}</td>
-        </tr>
-      );
-    });
+
+    this.setState(
+      {
+        data: [...this.state.data, value],
+      },
+      console.log(this.state)
+    );
   };
 
   render() {
@@ -150,7 +151,7 @@ export default class Admin extends Component {
               <button
                 className="btn btn-success"
                 disabled={!this.state.formValid}
-                onClick={this.renderUserList}
+                onClick={() => this.renderUserList()}
               >
                 Submit
               </button>
@@ -199,7 +200,16 @@ export default class Admin extends Component {
                 <td>Email</td>
               </tr>
             </thead>
-            <tbody>{this.renderUserList}</tbody>
+            <tbody>
+              {this.state.data.map((data, i) => (
+                <tr key={i}>
+                  <td>{data.masv}</td>
+                  <td>{data.tensv}</td>
+                  <td>{data.sdt}</td>
+                  <td>{data.email}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
